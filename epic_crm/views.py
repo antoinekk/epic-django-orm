@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from.permissions import *
 from .serializers import *
 from .models import *
 
@@ -18,15 +19,11 @@ class ClientView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if request.user.team == 'SALES':
-            request.data['sales_contact'] = request.user.id
-            serializer = ClientSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            client = serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response('Only sales team member can create a new client.')
-    
+        serializer = ClientSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        client = serializer.save()
+        return Response(serializer.data)
+
     def get(self, request):
         clients = Client.objects.all()
         serializer = ClientSerializer(clients, many=True)
@@ -43,15 +40,7 @@ class ClientDetailsView(APIView):
     
     def put(self, request, id):
         client = Client.objects.get(id=id)
-        print(client.sales_contact.id)
-        if request.user.id == client.sales_contact.id or request.user.team == 'MANAGEMENT':
-            serializer = ClientSerializer(client, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response('Only sales team owner or management team can modify this client.')
-
-
-
-
+        serializer = ClientSerializer(client, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

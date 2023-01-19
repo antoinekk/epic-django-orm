@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-chfumjv@yyvjc=c6^$ytc3@805_75-tv0r_oa$mi6b_&t-61fn'
+SECRET_KEY = 'django-insecure-_j96rx0_srhxb-h*c++qc(_&vfm-_4bwp%q478fzbf=hmbdd07'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'epic_app'
+    'epic_crm'
 ]
+
+AUTH_USER_MODEL = 'epic_crm.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -124,10 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
-
-AUTH_USER_MODEL = 'epic_app.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -138,4 +136,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
 }
