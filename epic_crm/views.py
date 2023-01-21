@@ -16,7 +16,7 @@ class SignupView(APIView):
 
 class ClientView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & ClientPermissions]
 
     def post(self, request):
         request.data['sales_contact'] = request.user.id
@@ -32,7 +32,7 @@ class ClientView(APIView):
 
 class ClientDetailsView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & ClientPermissions]
     
     def get(self, request, id):
         client = Client.objects.get(id=id)
@@ -53,7 +53,7 @@ class ClientDetailsView(APIView):
 
 class ContractView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & ContractPermissions]
 
     def post(self, request, id):
         client = Client.objects.get(id=id)
@@ -72,7 +72,7 @@ class ContractView(APIView):
 
 class ContractDetailsView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & ContractPermissions]
 
     def get(self, request, id):
         contract = Contract.objects.get(id=id)
@@ -96,7 +96,7 @@ class ContractDetailsView(APIView):
 
 class EventView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & EventPermissions]
 
     def post(self, request, id):
         contract = Contract.objects.get(id=id)
@@ -115,7 +115,7 @@ class EventView(APIView):
 
 class EventDetailsView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & EventPermissions]
 
     def get(self, request, event_id):
         event = Event.objects.get(id=id)
