@@ -29,7 +29,7 @@ class Client(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    status = models.BooleanField(default=False, verbose_name='prospect')
+    status = models.BooleanField(default=False, verbose_name='signed')
     sales_contact = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
 class Contract(models.Model):
@@ -37,7 +37,7 @@ class Contract(models.Model):
     balance = models.DecimalField(max_digits=7, decimal_places=2)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=False, verbose_name='unsigned')
+    status = models.BooleanField(default=False, verbose_name='signed')
     client_contact = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
     sales_contact = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
@@ -46,6 +46,6 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=False, verbose_name='uncompleted')
+    status = models.BooleanField(default=False, verbose_name='completed')
     contract = models.ForeignKey(to=Contract, on_delete=models.SET_NULL, null=True)
     support_contact = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)

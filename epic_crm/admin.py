@@ -3,27 +3,45 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import User, Client, Contract, Event
 
-
+@admin.register(User)
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': (
-            'is_active', 
-            'is_staff', 
-            'is_superuser',
-            'groups', 
-            'user_permissions',
-        )}),
+        (None, {'fields': ('email', 'password','first_name', 'last_name', 'team', 'phone',)}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',)}),
     )
-
-    list_display = ('email', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    list_display = ('email', 'first_name', 'last_name', 'team', 'is_staff', 'is_superuser',)
+    list_filter = ('team',)
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ('groups', 'user_permissions',)
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Client)
-admin.site.register(Contract)
-admin.site.register(Event)
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('first_name', 'last_name', 'company', 'phone', 'status', 'sales_contact',)}),
+    )
+    list_display = ('first_name', 'last_name', 'company', 'phone', 'status', 'sales_contact',)
+    list_filter = ('company', 'sales_contact',)
+    search_fields = ('company', 'sales_contact',)
+    ordering = ('company',)
+
+@admin.register(Contract)
+class ContractAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('amount', 'balance', 'status', 'client_contact', 'sales_contact',)}),
+    )
+    list_display = ('amount', 'balance', 'creation_date', 'last_update', 'status', 'client_contact', 'sales_contact',)
+    list_filter = ('client_contact', 'sales_contact',)
+    search_fields = ('client_contact', 'sales_contact',)
+    ordering = ('client_contact',)
+    
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('name', 'location', 'status', 'contract', 'support_contact',)}),
+    )
+    list_display = ('name', 'location', 'creation_date', 'last_update', 'status', 'contract', 'support_contact',)
+    list_filter = ('contract', 'support_contact',)
+    search_fields = ('contract', 'support_contact',)
+    ordering = ('contract',)
 

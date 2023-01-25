@@ -24,30 +24,12 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Client
         fields = "__all__"
     
-    def change_status(self):
-        if self.status == True:
-            self.status.verbose_name = 'signed client'
-        else:
-            self.status.verbose_name = 'prospect'
-
 class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
         fields = "__all__"
-    
-    def change_status(self):
-        if self.status == True:
-            self.status.verbose_name = 'signed'
-        else:
-            self.status.verbose_name = 'unsigned'
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = "__all__"
-    
-    def change_status(self):
-        if self.status == True:
-            self.status.verbose_name = 'completed'
-        else:
-            self.status.verbose_name = 'uncompleted'
