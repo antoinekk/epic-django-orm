@@ -4,7 +4,7 @@ from .models import *
 
 class ClientPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user == 'SUPPORT':
+        if request.user.team == 'SUPPORT':
             return request.method in permissions.SAFE_METHODS
         return request.user.team == 'SALES'
     
