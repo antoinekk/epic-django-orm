@@ -14,8 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
         user = self.Meta.model(**validated_data)
         if password is not None:
             user.set_password(password)
-        if user.team == 'MANAGEMENT':
-            user.is_superuser = True
         user.save()
         return user
 

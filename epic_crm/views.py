@@ -19,10 +19,9 @@ class ClientView(APIView):
     permission_classes = [IsAuthenticated & ClientPermissions]
 
     def post(self, request):
-        request.data['sales_contact'] = request.user.id
         serializer = ClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        client = serializer.save()
+        serializer.save()
         return Response(serializer.data)
 
     def get(self, request):
@@ -58,7 +57,6 @@ class ContractView(APIView):
     def post(self, request, id):
         client = Client.objects.get(id=id)
         request.data['client_contact'] = client.id
-        request.data['sales_contact'] = request.user.id
         serializer = ContractSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -82,7 +80,6 @@ class ContractDetailsView(APIView):
     def put(self, request, id):
         contract = Contract.objects.get(id=id)
         request.data['client_contact'] = contract.client_contact.id
-        request.data['sales_contact'] = request.user.id
         serializer = ContractSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -101,7 +98,6 @@ class EventView(APIView):
     def post(self, request, id):
         contract = Contract.objects.get(id=id)
         request.data['contract'] = contract.id
-        request.data['support_contact'] = request.user.id
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -125,7 +121,6 @@ class EventDetailsView(APIView):
     def put(self, request, event_id):
         event = Contract.objects.get(id=id)
         request.data['contract'] = event.contract.id
-        request.data['support_contact'] = request.user.id
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
