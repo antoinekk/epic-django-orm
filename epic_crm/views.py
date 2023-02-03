@@ -2,9 +2,11 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 from.permissions import *
 from .serializers import *
 from .models import *
+from .filters import *
 
 class SignupView(APIView):
 
@@ -17,6 +19,8 @@ class SignupView(APIView):
 class ClientView(APIView):
 
     permission_classes = [IsAuthenticated & ClientPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ClientFilter
 
     def post(self, request):
         serializer = ClientSerializer(data=request.data)
@@ -32,6 +36,8 @@ class ClientView(APIView):
 class ClientDetailsView(APIView):
 
     permission_classes = [IsAuthenticated & ClientPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ClientFilter
     
     def get(self, request, id):
         client = Client.objects.get(id=id)
@@ -53,6 +59,8 @@ class ClientDetailsView(APIView):
 class ContractView(APIView):
 
     permission_classes = [IsAuthenticated & ContractPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ContractFilter
 
     def post(self, request, id):
         client = Client.objects.get(id=id)
@@ -71,6 +79,8 @@ class ContractView(APIView):
 class ContractDetailsView(APIView):
 
     permission_classes = [IsAuthenticated & ContractPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ContractFilter
 
     def get(self, request, id):
         contract = Contract.objects.get(id=id)
@@ -94,6 +104,8 @@ class ContractDetailsView(APIView):
 class EventView(APIView):
 
     permission_classes = [IsAuthenticated & EventPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = EventFilter
 
     def post(self, request, id):
         contract = Contract.objects.get(id=id)
@@ -112,6 +124,8 @@ class EventView(APIView):
 class EventDetailsView(APIView):
 
     permission_classes = [IsAuthenticated & EventPermissions]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = EventFilter
 
     def get(self, request, event_id):
         event = Event.objects.get(id=id)

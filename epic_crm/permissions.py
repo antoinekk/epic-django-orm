@@ -13,7 +13,7 @@ class ClientPermissions(permissions.BasePermission):
             return request.user.team in ('MANAGEMENT', 'SALES') and obj.status is False
         elif (request.user.team == 'SUPPORT' and request.method in permissions.SAFE_METHODS):
             return obj in Client.objects.filter(contract__event__support_contact=request.user)
-        return (request.user == obj.sales_contact or request.user.team == 'MANAGEMENT' or obj.status is False)
+        return (request.user == obj.sales_contact or request.user.team == 'MANAGEMENT') and obj.status is False
 
 class ContractPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -33,7 +33,7 @@ class ContractPermissions(permissions.BasePermission):
 class EventPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.team == 'SUPPORT':
-            return request.method in ['GET', 'POST', 'PUT']
+            return request.method in ['GET', 'PUT']
         return request.user.team in ('MANAGEMENT', 'SALES')
 
     def has_object_permission(self, request, view, obj):

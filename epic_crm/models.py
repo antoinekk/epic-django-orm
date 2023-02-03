@@ -55,6 +55,7 @@ class Event(models.Model):
     reference = models.CharField(max_length=25, unique=True)
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
+    event_date = models.DateTimeField(blank=True, auto_now_add=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False, verbose_name='completed')

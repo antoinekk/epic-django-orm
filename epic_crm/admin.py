@@ -69,8 +69,8 @@ class ContractAdmin(admin.ModelAdmin):
         return super().has_view_permission(request, obj)
     
     def has_add_permission(self, request, obj=None):
-        pass
-    
+        return request.user.team in ('MANAGEMENT', 'SALES')
+
     def has_change_permission(self, request, obj=None):
         if obj is None:
             return True
@@ -96,7 +96,7 @@ class EventAdmin(admin.ModelAdmin):
         return super().has_view_permission(request, obj)
     
     def has_add_permission(self, request, obj=None):
-        pass
+        return request.user.team in ('MANAGEMENT', 'SALES')
     
     def has_change_permission(self, request, obj=None):
         if obj is None:
