@@ -24,7 +24,7 @@ class EventFilter(filters.FilterSet):
     class Meta:
         model = Event
         fields = {
-            'contract__sales_contact__last_name': ['exact', 'icontains'],
-            'contract__sales_contact__email': ['exact', 'icontains'],
+            'contract__client_contact__last_name': ['exact', 'icontains'],
+            'contract__client_contact__email': ['exact', 'icontains'],
             'event_date': ['exact', 'gte', 'lte']
         }
