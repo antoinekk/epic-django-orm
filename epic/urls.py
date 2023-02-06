@@ -15,8 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_nested.routers import DefaultRouter, NestedDefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView
+from epic_crm.views import *
+
+router = DefaultRouter()
+
+router.register(r"signup", SignupViewset, basename="signup")
+router.register(r"users", UserViewset, basename="user")
+router.register(r"clients", ClientViewset, basename="client")
+
+contract_router = NestedDefaultRouter(router, r"clients", lookup="client")
+contract_router.register(r"contracts", ContractViewset, basename="contract")
+event_router = NestedDefaultRouter(contract_router, r"contracts", lookup="contract")
+event_router.register(r"events", EventViewset, basename="event")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('epic_crm.urls'))
+    path('api/login/', TokenObtainPairView.as_view()),
+    path('api/', include(router.urls)),
+    path('api/', include(contract_router.urls)),
+    path('api/', include(event_router.urls))
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
@@ -8,139 +9,42 @@ from .serializers import *
 from .models import *
 from .filters import *
 
-class SignupView(APIView):
+class SignupViewset(ModelViewSet):
+    serializer_class = SignUpSerializer
 
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    def get_queryset(self):
+        return User.objects.all()
 
-class ClientView(APIView):
+class UserViewset(ModelViewSet):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated & UserPermissions]
 
+    def get_queryset(self):
+        return User.objects.all()
+
+class ClientViewset(ModelViewSet):
+    serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated & ClientPermissions]
     filter_backends = [DjangoFilterBackend]
     filterset_class = ClientFilter
 
-    def post(self, request):
-        serializer = ClientSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    def get_queryset(self):
+        return Client.objects.all()
 
-    def get(self, request):
-        clients = Client.objects.all()
-        serializer = ClientSerializer(clients, many=True)
-        return Response(serializer.data)
-
-class ClientDetailsView(APIView):
-
-    permission_classes = [IsAuthenticated & ClientPermissions]
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = ClientFilter
-    
-    def get(self, request, id):
-        client = Client.objects.get(id=id)
-        serializer = ClientSerializer(client)
-        return Response(serializer.data)
-    
-    def put(self, request, id):
-        client = Client.objects.get(id=id)
-        serializer = ClientSerializer(client, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-    
-    def delete(self, request, id):
-        client = Client.objects.get(id=id)
-        client.delete()
-        return Response('Client has been deleted')
-
-class ContractView(APIView):
-
+class ContractViewset(ModelViewSet):
+    serializer_class = ContractSerializer
     permission_classes = [IsAuthenticated & ContractPermissions]
     filter_backends = [DjangoFilterBackend]
     filterset_class = ContractFilter
 
-    def post(self, request, id):
-        client = Client.objects.get(id=id)
-        request.data['client_contact'] = client.id
-        serializer = ContractSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-    
-    def get(self, request, id):
-        client = Client.objects.get(id=id)
-        contracts = Contract.objects.filter(client_contact=client)
-        serializer = ContractSerializer(contracts, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return Contract.objects.all()
 
-class ContractDetailsView(APIView):
-
-    permission_classes = [IsAuthenticated & ContractPermissions]
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = ContractFilter
-
-    def get(self, request, id):
-        contract = Contract.objects.get(id=id)
-        serializer = ContractSerializer(contract)
-        return Response(serializer.data)
-    
-    def put(self, request, id):
-        contract = Contract.objects.get(id=id)
-        request.data['client_contact'] = contract.client_contact.id
-        serializer = ContractSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def delete(self, request, id):
-        contract = Contract.objects.get(id=id)
-        contract.delete()
-        return Reponse('Contract has been deleted')
-
-
-class EventView(APIView):
-
+class EventViewset(ModelViewSet):
+    serializer_class = EventSerializer
     permission_classes = [IsAuthenticated & EventPermissions]
     filter_backends = [DjangoFilterBackend]
     filterset_class = EventFilter
-
-    def post(self, request, id):
-        contract = Contract.objects.get(id=id)
-        request.data['contract'] = contract.id
-        serializer = EventSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-      
-    def get(self, request, id):
-        contract = Contract.objects.get(id=id)
-        events = Event.objects.filter(contract=contract)
-        serializer = ContractSerializer(events, many=True)
-        return Response(serializer.data)
-
-class EventDetailsView(APIView):
-
-    permission_classes = [IsAuthenticated & EventPermissions]
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = EventFilter
-
-    def get(self, request, event_id):
-        event = Event.objects.get(id=id)
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
     
-    def put(self, request, event_id):
-        event = Contract.objects.get(id=id)
-        request.data['contract'] = event.contract.id
-        serializer = EventSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-    
-    def delete(self, request, id):
-        event = Event.objects.get(id=id)
-        event.delete()
-        return Reponse('Event has been deleted')
+    def get_queryset(self):
+        return Event.objects.all()

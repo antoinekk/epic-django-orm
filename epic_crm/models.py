@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-
     email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=255, null=True, blank=True)
@@ -45,7 +44,7 @@ class Contract(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False, verbose_name='signed')
-    client_contact = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
+    client_contact = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, limit_choices_to={"status": True})
     sales_contact = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, limit_choices_to={"team":"SALES"})
 
     def __str__(self):
@@ -59,7 +58,7 @@ class Event(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False, verbose_name='completed')
-    contract = models.ForeignKey(to=Contract, on_delete=models.SET_NULL, null=True)
+    contract = models.ForeignKey(to=Contract, on_delete=models.SET_NULL, null=True, limit_choices_to={"status": True})
     support_contact = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, limit_choices_to={"team":"SUPPORT"})
 
     def __str__(self):

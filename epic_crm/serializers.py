@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import *
 
-class UserSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+
         fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True}
@@ -16,6 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
         user.save()
         return user
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
