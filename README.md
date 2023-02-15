@@ -15,7 +15,7 @@ sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
 Create your database
 
 ```
-sudo -u postgres pqsl
+sudo -u postgres psql
 ```
 ```
 CREATE DATABASE yourdb;
